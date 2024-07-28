@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace PersonRESTful.Services
 {
-    public class CSVService
+    public class CSVService : ICSVService
     {
         public IEnumerable<T> ReadCSV<T>()
         {
