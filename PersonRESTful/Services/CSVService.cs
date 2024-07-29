@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using PersonRESTful.Models;
 using System.Formats.Asn1;
 using System.Globalization;
 
@@ -16,6 +17,8 @@ namespace PersonRESTful.Services
             };
 
             var csv = new CsvReader(reader, csvConfig);
+            csv.Context.RegisterClassMap<PersonMap>();
+
             var records = csv.GetRecords<T>();
             return records;
         }
