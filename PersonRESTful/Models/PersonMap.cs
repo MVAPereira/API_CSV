@@ -6,12 +6,12 @@ namespace PersonRESTful.Models
     {
         public PersonMap()
         {
-            Map(m => m.Id).Index(0);
-            Map(m => m.Name).Index(1);
-            Map(m => m.LastName).Index(2);
-            Map(m => m.Zipcode).Index(3);
-            Map(m => m.City).Index(4);
-            Map(m => m.Color).Index(5);
+            Map(m => m.Id).Convert(args => args.Row.Context.Parser.Row); ;
+            Map(m => m.Name).Index(0);
+            Map(m => m.LastName).Index(1);
+            Map(m => m.Zipcode).Index(2);
+            Map(m => m.City).Index(3);
+            Map(m => m.Color).Index(4);
         }
 
     }
