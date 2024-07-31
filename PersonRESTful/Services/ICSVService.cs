@@ -1,7 +1,9 @@
-﻿namespace PersonRESTful.Services
+﻿using PersonRESTful.Models;
+
+namespace PersonRESTful.Services
 {
     public interface ICSVService
     {
-        public IEnumerable<T> ReadCSV<T>();
+        public List<Person> GetAllPersons();
     }
 }

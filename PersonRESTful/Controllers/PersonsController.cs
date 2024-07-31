@@ -16,11 +16,11 @@ namespace PersonRESTful.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEmployeeCSV()
+        public async Task<IActionResult> GetPersonCSV()
         {
-            var Persons = _csvService.ReadCSV<Person>();
-
+            var Persons = _csvService.GetAllPersons();
             return Ok(Persons);
         }
     }
 }
+    

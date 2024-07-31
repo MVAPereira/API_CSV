@@ -9,7 +9,7 @@ namespace PersonRESTful.Services
 {
     public class CSVService : ICSVService
     {
-        public IEnumerable<T> ReadCSV<T>()
+        public List<Person> GetAllPersons()
         {
             var reader = new StreamReader("Data/sample-input.csv");
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -20,13 +20,13 @@ namespace PersonRESTful.Services
             var csv = new CsvReader(reader, csvConfig);
             csv.Context.RegisterClassMap<PersonMap>();
 
-            var records = new List<T>();
+            var records = new List<Person>();
 
             while (csv.Read())
             {
                 try
                 {
-                    var record = csv.GetRecord<T>();
+                    var record = csv.GetRecord<Person>();
 
                     if(record is Person person)
                     {
