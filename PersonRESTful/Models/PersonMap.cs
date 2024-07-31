@@ -9,11 +9,11 @@ namespace PersonRESTful.Models
         public PersonMap()
         {
             Map(m => m.Id).Convert(args => GetId(args));
-            Map(m => m.Name).Convert(args => getName(args));
-            Map(m => m.LastName).Convert(args => getLastName(args));
+            Map(m => m.Name).Convert(args => GetName(args));
+            Map(m => m.LastName).Convert(args => GetLastName(args));
             Map(m => m.Zipcode).Convert(args => ExtractZipcode(args));
             Map(m => m.City).Convert(args => ExtractCity(args));
-            Map(m => m.Color).Convert(args => getColor(args));
+            Map(m => m.Color).Convert(args => GetColor(args));
         }
 
         private int GetId(ConvertFromStringArgs args)
@@ -21,7 +21,7 @@ namespace PersonRESTful.Models
             return Convert.ToInt32(args.Row.Context.Parser.RawRow);
         }
 
-        private string getName(ConvertFromStringArgs args) 
+        private string GetName(ConvertFromStringArgs args) 
         {
             int nameRowIndex = 1;
             if(IsFieldValid(args, nameRowIndex))
@@ -32,7 +32,7 @@ namespace PersonRESTful.Models
             return string.Empty;
         }
 
-        private string getLastName(ConvertFromStringArgs args)
+        private string GetLastName(ConvertFromStringArgs args)
         {
             int lastNameRowIndex = 0;
             if (IsFieldValid(args, lastNameRowIndex))
@@ -71,7 +71,7 @@ namespace PersonRESTful.Models
             return string.Empty;
         }
 
-        private string getColor(ConvertFromStringArgs args)
+        private string GetColor(ConvertFromStringArgs args)
         {
             int colorRowIndex = 3;
             if(IsFieldValid(args, colorRowIndex))
