@@ -28,8 +28,6 @@ namespace PersonRESTful.Services
                 {
                     var record = csv.GetRecord<T>();
 
-                    Console.WriteLine(record);
-
                     if(record is Person person)
                     {
                         if (string.IsNullOrEmpty(person.Name))

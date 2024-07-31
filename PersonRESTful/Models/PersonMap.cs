@@ -10,7 +10,7 @@ namespace PersonRESTful.Models
         {
             Map(m => m.Id).Convert(args => GetId(args));
             Map(m => m.Name).Convert(args => getName(args));
-            Map(m => m.LastName).Index(1).Convert(args => args.Row.GetField<string>(0)?.Trim()).Validate(args => !string.IsNullOrEmpty(args.Field)); ;
+            Map(m => m.LastName).Convert(args => getLastName(args));
             Map(m => m.Zipcode).Convert(args => ExtractZipcode(args));
             Map(m => m.City).Convert(args => ExtractCity(args));
             Map(m => m.Color).Index(3);
@@ -28,6 +28,17 @@ namespace PersonRESTful.Models
             {
                 string nameField = args.Row.GetField<string>(nameRowIndex).Trim();
                 return nameField;
+            }
+            return string.Empty;
+        }
+
+        private string getLastName(ConvertFromStringArgs args)
+        {
+            int lastNameRowIndex = 0;
+            if (IsFieldValid(args, lastNameRowIndex))
+            {
+                string lastNameField = args.Row.GetField<string>(lastNameRowIndex).Trim();
+                return lastNameField;
             }
             return string.Empty;
         }
