@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using PersonRESTful.Models;
+using System;
 using System.Formats.Asn1;
 using System.Globalization;
 
@@ -28,34 +29,31 @@ namespace PersonRESTful.Services
                 {
                     var record = csv.GetRecord<Person>();
 
-                    if(record is Person person)
+                    if (string.IsNullOrEmpty(record.Name))
                     {
-                        if (string.IsNullOrEmpty(person.Name))
-                        {
-                            throw new ArgumentException("The field is empty!");
-                        }
-
-                        if (string.IsNullOrEmpty(person.LastName))
-                        {
-                            throw new ArgumentException("The field is empty!");
-                        }
-
-                        if (string.IsNullOrEmpty(person.Zipcode))
-                        {
-                            throw new ArgumentException("The field is empty!");
-                        }
-
-                        if (string.IsNullOrEmpty(person.City))
-                        {
-                            throw new ArgumentException("The field is empty!");
-                        }
-
-                        if (string.IsNullOrEmpty(person.Color))
-                        {
-                            throw new ArgumentException("The field is empty!");
-                        }
+                        throw new ArgumentException("The field is empty!");
                     }
 
+                    if (string.IsNullOrEmpty(record.LastName))
+                    {
+                        throw new ArgumentException("The field is empty!");
+                    }
+
+                    if (string.IsNullOrEmpty(record.Zipcode))
+                    {
+                        throw new ArgumentException("The field is empty!");
+                    }
+
+                    if (string.IsNullOrEmpty(record.City))
+                    {
+                        throw new ArgumentException("The field is empty!");
+                    }
+
+                    if (string.IsNullOrEmpty(record.Color))
+                    {
+                        throw new ArgumentException("The field is empty!");
+                    }
+                    
                     records.Add(record);
                 }
                 catch (ArgumentException ex)
