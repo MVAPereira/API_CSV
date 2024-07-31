@@ -11,7 +11,7 @@ namespace PersonRESTful.Services
     {
         public IEnumerable<T> ReadCSV<T>()
         {
-            var reader = new StreamReader("Data/Persons.csv");
+            var reader = new StreamReader("Data/sample-input.csv");
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false

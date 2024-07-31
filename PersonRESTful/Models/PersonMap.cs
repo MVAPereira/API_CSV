@@ -9,10 +9,9 @@ namespace PersonRESTful.Models
         public PersonMap()
         {
             Map(m => m.Id).Convert(args => GetId(args));
-
-            Map(m => m.Name).Index(0).Validate(args => !string.IsNullOrEmpty(args.Field));
-            Map(m => m.LastName).Index(1);
-            Map(m => m.Zipcode).Convert(args => ExtractZipCode(args));
+            Map(m => m.Name).Index(0).Convert(args => args.Row.GetField<string>(0)?.Trim()).Validate(args => !string.IsNullOrEmpty(args.Field));
+            Map(m => m.LastName).Index(1).Convert(args => args.Row.GetField<string>(0)?.Trim()).Validate(args => !string.IsNullOrEmpty(args.Field)); ;
+            Map(m => m.Zipcode).Convert(args => ExtractZipcode(args));
             Map(m => m.City).Convert(args => ExtractCity(args));
             Map(m => m.Color).Index(3);
         }
@@ -22,26 +21,49 @@ namespace PersonRESTful.Models
             return Convert.ToInt32(args.Row.Context.Parser.RawRow);
         }
 
-        private string ExtractZipCode(ConvertFromStringArgs args)
+        private string ExtractZipcode(ConvertFromStringArgs args)
         {
-            if(!string.IsNullOrEmpty(args.Row.GetField<string>(2)))
+            int zipcodeRowIndex = 2;
+            int zipcodeLength = 5;
+
+            if(IsFieldValid(args, zipcodeRowIndex))
             {
-                string value = args.Row.GetField<string>(2);
-                string valueCut = value.Substring(0, 5);
-                return valueCut;
+                string zipcodeField = args.Row.GetField<string>(zipcodeRowIndex).Trim().Substring(0, zipcodeLength);
+                return zipcodeField;
             }
-            return string.Empty;     
+            return string.Empty;   
         }
 
         private string ExtractCity(ConvertFromStringArgs args)
         {
-            if (!string.IsNullOrEmpty(args.Row.GetField<string>(2)))
+
+            int cityRowIndex = 2;
+            int cityFieldIndex = 6;
+
+            if(IsFieldValid(args, cityRowIndex))
             {
-                string value = args.Row.GetField<string>(2);
-                string city = value.Substring(5).Trim();
-                return city;
+                string cityField = args.Row.GetField<string>(cityRowIndex).Trim().Substring(cityFieldIndex);
+                return cityField;
             }
+
             return string.Empty;
+        }
+
+        private bool IsFieldValid(ConvertFromStringArgs args, int fieldIndexInRow)
+        {
+            int numberOfFieldsPerRow = args.Row.Parser.Count;
+
+
+            if (numberOfFieldsPerRow > fieldIndexInRow)
+            {
+                string field = args.Row.GetField<string>(fieldIndexInRow).Trim();
+
+                if (!string.IsNullOrEmpty(field))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
