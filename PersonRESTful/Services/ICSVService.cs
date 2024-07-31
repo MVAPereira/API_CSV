@@ -6,5 +6,6 @@ namespace PersonRESTful.Services
     {
         public List<Person> GetAllPersons();
         public Person GetPersonById(int personId);
+        public List<Person> GetPersonsByColor(string color);
     }
 }

@@ -103,5 +103,10 @@ namespace PersonRESTful.Services
 
             return person;
         }
+
+        public List<Person> GetPersonsByColor(string color)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
