@@ -6,6 +6,7 @@ namespace PersonRESTful.Models
 {
     public class PersonMap : ClassMap<Person>
     {
+
         public PersonMap()
         {
             Map(m => m.Id).Convert(args => GetId(args));
@@ -73,11 +74,20 @@ namespace PersonRESTful.Models
 
         private string GetColor(ConvertFromStringArgs args)
         {
+            
+
             int colorRowIndex = 3;
             if(IsFieldValid(args, colorRowIndex))
             {
+
                 string colorField = args.Row.GetField<string>(colorRowIndex).Trim();
-                return colorField;
+
+                int colorNumber = Convert.ToInt32(colorField);
+                var color = (Colors)colorNumber;
+                string colorName = color.ToString();
+
+                
+                return colorName;
             }
 
             return string.Empty;
