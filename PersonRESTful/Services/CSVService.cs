@@ -69,5 +69,40 @@ namespace PersonRESTful.Services
             }
             return records;
         }
+
+        public Person GetPersonById(int personId)
+        {
+            var reader = new StreamReader("Data/sample-input.csv");
+            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            };
+
+            var csv = new CsvReader(reader, csvConfig);
+            csv.Context.RegisterClassMap<PersonMap>();
+
+            var person = new Person();
+            while (csv.Read())
+            {
+                try
+                {
+                    var record = csv.GetRecord<Person>();
+                    if (record.Id == personId)
+                    { 
+                        person = record;
+                        break;
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"Validation error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return person;
+        }
     }
 }
