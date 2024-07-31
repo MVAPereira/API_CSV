@@ -5,7 +5,7 @@ using PersonRESTful.Services;
 
 namespace PersonRESTful.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("persons")]
     [ApiController]
     public class PersonsController : ControllerBase
     {
@@ -16,10 +16,17 @@ namespace PersonRESTful.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPersonCSV()
+        public async Task<IActionResult> GetAllPersons()
         {
             var Persons = _csvService.GetAllPersons();
             return Ok(Persons);
+        }
+
+        [HttpGet("{personId}")]
+        public async Task<IActionResult> GetPerson(int personId)
+        {
+            var Person = _csvService.GetPersonById(personId);
+            return Ok(Person);
         }
     }
 }
