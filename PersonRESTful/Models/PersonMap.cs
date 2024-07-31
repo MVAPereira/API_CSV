@@ -13,7 +13,7 @@ namespace PersonRESTful.Models
             Map(m => m.LastName).Convert(args => getLastName(args));
             Map(m => m.Zipcode).Convert(args => ExtractZipcode(args));
             Map(m => m.City).Convert(args => ExtractCity(args));
-            Map(m => m.Color).Index(3);
+            Map(m => m.Color).Convert(args => getColor(args));
         }
 
         private int GetId(ConvertFromStringArgs args)
@@ -66,6 +66,18 @@ namespace PersonRESTful.Models
             {
                 string cityField = args.Row.GetField<string>(cityRowIndex).Trim().Substring(cityFieldIndex);
                 return cityField;
+            }
+
+            return string.Empty;
+        }
+
+        private string getColor(ConvertFromStringArgs args)
+        {
+            int colorRowIndex = 3;
+            if(IsFieldValid(args, colorRowIndex))
+            {
+                string colorField = args.Row.GetField<string>(colorRowIndex).Trim();
+                return colorField;
             }
 
             return string.Empty;
