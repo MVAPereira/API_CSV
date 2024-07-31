@@ -28,6 +28,14 @@ namespace PersonRESTful.Controllers
             var Person = _csvService.GetPersonById(personId);
             return Ok(Person);
         }
+
+        [HttpGet("color/{color}")]
+        public async Task<IActionResult> GetPersonsByColor(string color)
+        {
+            var Persons = _csvService.GetPersonsByColor(color);
+            return Ok(Persons);
+        }
+
     }
 }
     
