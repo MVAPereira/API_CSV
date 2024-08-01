@@ -74,24 +74,19 @@ namespace PersonRESTful.Models
 
         private string GetColor(ConvertFromStringArgs args)
         {
-            
-
             int colorRowIndex = 3;
             if(IsFieldValid(args, colorRowIndex))
             {
 
-                string colorField = args.Row.GetField<string>(colorRowIndex).Trim();
-
-                int colorNumber = Convert.ToInt32(colorField);
-                var color = (Colors)colorNumber;
-                string colorName = color.ToString();
-
-                
-                return colorName;
+                int colorFieldId = Convert.ToInt32(args.Row.GetField<string>(colorRowIndex).Trim());
+                var colorName = (Colors)colorFieldId;
+                string colorField = colorName.ToString();
+                return colorField;
             }
 
             return string.Empty;
         }
+
 
         private bool IsFieldValid(ConvertFromStringArgs args, int fieldIndexInRow)
         {
