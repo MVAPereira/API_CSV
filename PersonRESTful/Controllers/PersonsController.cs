@@ -9,30 +9,30 @@ namespace PersonRESTful.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly ICSVService _csvService;
-        public PersonsController(ICSVService csvService)
+        private readonly IPersonService _personService;
+        public PersonsController(IPersonService personService)
         {
-            _csvService = csvService;
+            _personService = personService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var Persons = _csvService.GetAllPersons();
+            var Persons = _personService.GetAllPersons();
             return Ok(Persons);
         }
 
         [HttpGet("{personId}")]
         public async Task<IActionResult> GetPerson(int personId)
         {
-            var Person = _csvService.GetPersonById(personId);
+            var Person = _personService.GetPersonById(personId);
             return Ok(Person);
         }
 
         [HttpGet("color/{color}")]
         public async Task<IActionResult> GetPersonsByColor(string color)
         {
-            var Persons = _csvService.GetPersonsByColor(color);
+            var Persons = _personService.GetPersonsByColor(color);
             return Ok(Persons);
         }
 

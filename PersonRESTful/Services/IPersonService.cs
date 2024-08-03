@@ -2,7 +2,7 @@
 
 namespace PersonRESTful.Services
 {
-    public interface ICSVService
+    public interface IPersonService
     {
         public List<Person> GetAllPersons();
         public Person GetPersonById(int personId);
