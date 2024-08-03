@@ -1,3 +1,4 @@
+using PersonRESTful.Models;
 using PersonRESTful.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICSVService, CSVService>();
+builder.Services.AddScoped<ICSVService, CSVService>(sp => new CSVService("Data/sample-input.csv", new PersonMap()));
 
 var app = builder.Build();
 

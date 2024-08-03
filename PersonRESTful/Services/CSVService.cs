@@ -10,6 +10,13 @@ namespace PersonRESTful.Services
 {
     public class CSVService : ICSVService
     {
+        private readonly string _csvPath;
+        private readonly ClassMap<Person> _classMap;
+        public CSVService(string csvPath, ClassMap<Person> classMap)
+        {
+            _csvPath = csvPath;
+            _classMap = classMap;
+        }
         public List<Person> GetAllPersons()
         {
             var reader = new StreamReader("Data/sample-input.csv");
@@ -70,14 +77,14 @@ namespace PersonRESTful.Services
 
         public Person GetPersonById(int personId)
         {
-            var reader = new StreamReader("Data/sample-input.csv");
+            var reader = new StreamReader(_csvPath);
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false
             };
 
             var csv = new CsvReader(reader, csvConfig);
-            csv.Context.RegisterClassMap<PersonMap>();
+            csv.Context.RegisterClassMap(_classMap);
 
             var person = new Person();
             while (csv.Read())
