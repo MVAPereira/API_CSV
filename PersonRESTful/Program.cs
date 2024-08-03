@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IPersonService, CSVService>(sp => new CSVService("Data/sample-input.csv", new PersonMap()));
+builder.Services.AddScoped<IPersonService, PersonCSVService>(sp => new PersonCSVService("Data/sample-input.csv", new PersonMap()));
 
 var app = builder.Build();
 

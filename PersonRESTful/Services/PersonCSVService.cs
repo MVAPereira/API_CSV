@@ -8,11 +8,11 @@ using System.Globalization;
 
 namespace PersonRESTful.Services
 {
-    public class CSVService : IPersonService
+    public class PersonCSVService : IPersonService
     {
         private readonly string _csvPath;
         private readonly ClassMap<Person> _classMap;
-        public CSVService(string csvPath, ClassMap<Person> classMap)
+        public PersonCSVService(string csvPath, ClassMap<Person> classMap)
         {
             _csvPath = csvPath;
             _classMap = classMap;
