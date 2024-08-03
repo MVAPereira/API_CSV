@@ -87,7 +87,6 @@ namespace PersonRESTful.Models
             return string.Empty;
         }
 
-
         private bool IsFieldValid(ConvertFromStringArgs args, int fieldIndexInRow)
         {
             int numberOfFieldsPerRow = args.Row.Parser.Count;
