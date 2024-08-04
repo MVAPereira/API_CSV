@@ -156,8 +156,5 @@ namespace PersonRESTful.Tests.Controllers
             var objectResult = (ObjectResult)result;
             objectResult.StatusCode.Should().Be(500);
         }
-
-
     }
-
 }

@@ -55,13 +55,20 @@ namespace PersonRESTful.Controllers
         [HttpGet("color/{color}")]
         public async Task<IActionResult> GetPersonsByColor(string color)
         {
-            var persons = await _personService.GetPersonsByColor(color);
-            if (persons == null)
+            try
             {
-                return NotFound();
-            }
+                var persons = await _personService.GetPersonsByColor(color);
+                if (persons == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(persons);
+                return Ok(persons);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
     }
