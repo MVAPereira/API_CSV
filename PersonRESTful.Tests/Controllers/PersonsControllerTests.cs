@@ -1,4 +1,6 @@
 ﻿using FakeItEasy;
+using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using PersonRESTful.Controllers;
 using PersonRESTful.Models;
 using PersonRESTful.Services;
@@ -22,14 +24,30 @@ namespace PersonRESTful.Tests.Controllers
         }
 
         [Fact]
-        public void PersonsController_GetAllPersons_ReturnsSuccess()
+        public async Task PersonsController_GetAllPersons_ReturnsTaskIActionResult()
         {
             //Arrange
-            var persons = A.CollectionOfFake<Person>(5);
+            var persons = A.Fake<IEnumerable<Person>>();
+            A.CallTo(() => _personService.GetAllPersons()).Returns(persons);
 
             //Act
+            var result = await _personsController.GetAllPersons();
 
             //Assert
+            result.Should().BeAssignableTo<IActionResult>();
+        }
+
+        [Fact]
+        public async Task PersonsController_GetAllPerson_ReturnsNotFoundResult()
+        {
+            // Arrange
+            A.CallTo(() => _personService.GetAllPersons()).Returns(Task.FromResult<IEnumerable<Person>>(null));
+
+            // Act
+            var result = await _personsController.GetAllPersons();
+
+            // Assert
+            result.Should().BeOfType<NotFoundResult>();
         }
     }   
 
