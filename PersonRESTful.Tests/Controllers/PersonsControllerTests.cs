@@ -60,11 +60,27 @@ namespace PersonRESTful.Tests.Controllers
             var result = await _personsController.GetAllPersons();
 
             // Assert
-
             result.Should().BeOfType<ObjectResult>();
             var objectResult = (ObjectResult)result;
             objectResult.StatusCode.Should().Be(500);
         }
+
+        [Fact]
+        public async Task PersonsController_GetPerson_ReturnsTaskIActionResult()
+        {
+            //Arrange
+            var person = A.Fake<Person>();
+            var personId = 1;
+            A.CallTo(() => _personService.GetPersonById(personId)).Returns(person);
+
+            //Act
+            var result = await _personsController.GetPersonById(personId);
+
+            //Assert
+            result.Should().BeAssignableTo<IActionResult>();
+        }
+
+
 
 
     }   

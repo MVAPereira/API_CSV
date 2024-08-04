@@ -35,7 +35,7 @@ namespace PersonRESTful.Controllers
         }
 
         [HttpGet("{personId}")]
-        public async Task<IActionResult> GetPerson(int personId)
+        public async Task<IActionResult> GetPersonById(int personId)
         {
             var Person = await _personService.GetPersonById(personId);
             return Ok(Person);
