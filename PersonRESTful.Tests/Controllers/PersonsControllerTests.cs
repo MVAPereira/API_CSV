@@ -141,6 +141,23 @@ namespace PersonRESTful.Tests.Controllers
             result.Should().BeOfType<NotFoundResult>();
         }
 
+        [Fact]
+        public async Task PersonsController_GetPersonsByColor_ReturnsInternalServerError_WhenOnExpection()
+        {
+            // Arrange
+            var color = "color";
+            A.CallTo(() => _personService.GetPersonsByColor(color)).Throws<Exception>();
+
+            // Act
+            var result = await _personsController.GetPersonsByColor(color);
+
+            // Assert
+            result.Should().BeOfType<ObjectResult>();
+            var objectResult = (ObjectResult)result;
+            objectResult.StatusCode.Should().Be(500);
+        }
+
+
     }
 
 }
