@@ -18,13 +18,20 @@ namespace PersonRESTful.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var persons = await _personService.GetAllPersons();
-            if (persons == null) 
+            try
             {
-                return NotFound();
+                var persons = await _personService.GetAllPersons();
+                if (persons == null)
+                {
+                    return NotFound();
+                }
+                return Ok(persons);
             }
 
-            return Ok(persons);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("{personId}")]
