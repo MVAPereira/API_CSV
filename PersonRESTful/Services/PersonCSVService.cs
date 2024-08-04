@@ -18,7 +18,7 @@ namespace PersonRESTful.Services
             _classMap = classMap;
         }
 
-        private List<Person> ReturnValidPersons()
+        private async Task<List<Person>> ReturnValidPersons()
         {
             var reader = new StreamReader(_csvPath);
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -26,7 +26,10 @@ namespace PersonRESTful.Services
                 HasHeaderRecord = false
             };
 
-            var csv = new CsvReader(reader, csvConfig);
+            var fileContent = await reader.ReadToEndAsync();
+            var stringReader = new StringReader(fileContent);
+
+            var csv = new CsvReader(stringReader, csvConfig);
             csv.Context.RegisterClassMap(_classMap);
 
             List<Person> persons = new List<Person>();
@@ -72,24 +75,23 @@ namespace PersonRESTful.Services
             return persons;
         }
 
-        public List<Person> GetAllPersons()
+        public async Task<List<Person>> GetAllPersons()
         {
-            List<Person> persons = ReturnValidPersons();
-            return persons;
+            return await Task.Run(() => ReturnValidPersons());
         }
 
-        public Person GetPersonById(int personId)
+        public async Task<Person> GetPersonById(int personId)
         {
-            List<Person> persons = ReturnValidPersons();
+            List<Person> persons = await ReturnValidPersons();
             var person = persons.FirstOrDefault(p => p.Id == personId);
             return person;
         }
 
-        public List<Person> GetPersonsByColor(string color)
+        public async Task<List<Person>> GetPersonsByColor(string color)
         {
-            List<Person> persons = ReturnValidPersons().Where(p => p.Color == color).ToList();
-            return persons;
-
+            List<Person> persons = await ReturnValidPersons();
+            return persons.Where(p => p.Color == color).ToList();
         }
+
     }
 }

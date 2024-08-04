@@ -4,8 +4,8 @@ namespace PersonRESTful.Services
 {
     public interface IPersonService
     {
-        public List<Person> GetAllPersons();
-        public Person GetPersonById(int personId);
-        public List<Person> GetPersonsByColor(string color);
+        public Task<List<Person>> GetAllPersons();
+        public Task<Person> GetPersonById(int personId);
+        public Task<List<Person>> GetPersonsByColor(string color);
     }
 }

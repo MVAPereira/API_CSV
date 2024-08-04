@@ -18,21 +18,21 @@ namespace PersonRESTful.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var Persons =  _personService.GetAllPersons();
+            var Persons = await _personService.GetAllPersons();
             return Ok(Persons);
         }
 
         [HttpGet("{personId}")]
         public async Task<IActionResult> GetPerson(int personId)
         {
-            var Person = _personService.GetPersonById(personId);
+            var Person = await _personService.GetPersonById(personId);
             return Ok(Person);
         }
 
         [HttpGet("color/{color}")]
         public async Task<IActionResult> GetPersonsByColor(string color)
         {
-            var Persons = _personService.GetPersonsByColor(color);
+            var Persons = await _personService.GetPersonsByColor(color);
             return Ok(Persons);
         }
 
