@@ -38,7 +38,7 @@ namespace PersonRESTful.Tests.Controllers
         }
 
         [Fact]
-        public async Task PersonsController_GetAllPersons_ReturnsNotFoundResult()
+        public async Task PersonsController_GetAllPersons_ReturnsNotFoundResult_WhenPersonsAreNull()
         {
             // Arrange
             A.CallTo(() => _personService.GetAllPersons()).Returns(Task.FromResult<IEnumerable<Person>>(null));
@@ -49,6 +49,8 @@ namespace PersonRESTful.Tests.Controllers
             // Assert
             result.Should().BeOfType<NotFoundResult>();
         }
+
+
     }   
 
 }
