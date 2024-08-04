@@ -55,8 +55,13 @@ namespace PersonRESTful.Controllers
         [HttpGet("color/{color}")]
         public async Task<IActionResult> GetPersonsByColor(string color)
         {
-            var Persons = await _personService.GetPersonsByColor(color);
-            return Ok(Persons);
+            var persons = await _personService.GetPersonsByColor(color);
+            if (persons == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(persons);
         }
 
     }
