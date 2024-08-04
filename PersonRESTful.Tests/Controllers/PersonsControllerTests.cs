@@ -50,6 +50,22 @@ namespace PersonRESTful.Tests.Controllers
             result.Should().BeOfType<NotFoundResult>();
         }
 
+        [Fact]
+        public async Task PersonsController_GetAllPersons_ReturnsInternalServerError_WhenOnExpection()
+        {
+            // Arrange
+            A.CallTo(() => _personService.GetAllPersons()).Throws<Exception>();
+
+            // Act
+            var result = await _personsController.GetAllPersons();
+
+            // Assert
+
+            result.Should().BeOfType<ObjectResult>();
+            var objectResult = (ObjectResult)result;
+            objectResult.StatusCode.Should().Be(500);
+        }
+
 
     }   
 
