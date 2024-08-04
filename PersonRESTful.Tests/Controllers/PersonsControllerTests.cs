@@ -95,6 +95,23 @@ namespace PersonRESTful.Tests.Controllers
             result.Should().BeOfType<NotFoundResult>();
         }
 
+        [Fact]
+        public async Task PersonsController_GetPersonById_ReturnsInternalServerError_WhenOnExpection()
+        {
+            // Arrange
+            var personId = 1;
+            A.CallTo(() => _personService.GetPersonById(personId)).Throws<Exception>();
+
+            // Act
+            var result = await _personsController.GetPersonById(personId);
+
+            // Assert
+            result.Should().BeOfType<ObjectResult>();
+            var objectResult = (ObjectResult)result;
+            objectResult.StatusCode.Should().Be(500);
+        }
+
+
 
 
 
