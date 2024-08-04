@@ -80,6 +80,21 @@ namespace PersonRESTful.Tests.Controllers
             result.Should().BeAssignableTo<IActionResult>();
         }
 
+        [Fact]
+        public async Task PersonController_GetPersonById_ReturnsNotFound_WhenIdDoesNotExist()
+        {
+            //Arrange
+            var person = A.Fake<Person>();
+            var personId = 1;
+            A.CallTo(() => _personService.GetPersonById(personId)).Returns(Task.FromResult<Person>(null));
+
+            //Act
+            var result = await _personsController.GetPersonById(personId);
+
+            //Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
+
 
 
 
