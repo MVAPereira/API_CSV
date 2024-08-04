@@ -18,7 +18,7 @@ namespace PersonRESTful.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var Persons = _personService.GetAllPersons();
+            var Persons =  _personService.GetAllPersons();
             return Ok(Persons);
         }
 
