@@ -37,12 +37,19 @@ namespace PersonRESTful.Controllers
         [HttpGet("{personId}")]
         public async Task<IActionResult> GetPersonById(int personId)
         {
-            var person = await _personService.GetPersonById(personId);
-            if(person == null)
+            try
             {
-                return NotFound();
+                var person = await _personService.GetPersonById(personId);
+                if (person == null)
+                {
+                    return NotFound();
+                }
+                return Ok(person);
             }
-            return Ok(person);
+            catch (Exception ex) 
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("color/{color}")]

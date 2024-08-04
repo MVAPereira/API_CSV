@@ -111,10 +111,26 @@ namespace PersonRESTful.Tests.Controllers
             objectResult.StatusCode.Should().Be(500);
         }
 
+        [Fact]
+        public async Task PersonsController_GetPersonsByColor_ReturnsTaskIActionResult()
+        {
+            //Arrange
+            var persons = A.Fake<IEnumerable<Person>>();
+            var color = "color";
+
+            A.CallTo(() => _personService.GetPersonsByColor(color)).Returns(persons);
+
+            //Act
+            var result = await _personsController.GetPersonsByColor(color);
+
+            //Assert
+            result.Should().BeAssignableTo<IActionResult>();
+        }
 
 
 
 
-    }   
+
+    }
 
 }
