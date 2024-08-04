@@ -127,9 +127,19 @@ namespace PersonRESTful.Tests.Controllers
             result.Should().BeAssignableTo<IActionResult>();
         }
 
+        [Fact]
+        public async Task PersonsController_GetPersonsByColor_ReturnsNotFoundResult_WhenPersonsAreNull()
+        {
+            // Arrange
+            var color = "color";
+            A.CallTo(() => _personService.GetPersonsByColor(color)).Returns(Task.FromResult<IEnumerable<Person>>(null));
 
+            // Act
+            var result = await _personsController.GetPersonsByColor(color);
 
-
+            // Assert
+            result.Should().BeOfType<NotFoundResult>();
+        }
 
     }
 
