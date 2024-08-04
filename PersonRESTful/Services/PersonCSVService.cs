@@ -18,7 +18,7 @@ namespace PersonRESTful.Services
             _classMap = classMap;
         }
 
-        private async Task<List<Person>> ReturnValidPersons()
+        private async Task<IEnumerable<Person>> ReturnValidPersons()
         {
             var reader = new StreamReader(_csvPath);
             var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -75,21 +75,21 @@ namespace PersonRESTful.Services
             return persons;
         }
 
-        public async Task<List<Person>> GetAllPersons()
+        public async Task<IEnumerable<Person>> GetAllPersons()
         {
             return await Task.Run(() => ReturnValidPersons());
         }
 
         public async Task<Person> GetPersonById(int personId)
         {
-            List<Person> persons = await ReturnValidPersons();
+            var persons = await ReturnValidPersons();
             var person = persons.FirstOrDefault(p => p.Id == personId);
             return person;
         }
 
-        public async Task<List<Person>> GetPersonsByColor(string color)
+        public async Task<IEnumerable<Person>> GetPersonsByColor(string color)
         {
-            List<Person> persons = await ReturnValidPersons();
+            var persons = await ReturnValidPersons();
             return persons.Where(p => p.Color == color).ToList();
         }
 
