@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using PersonRESTful.Controllers;
+using PersonRESTful.Dto;
 using PersonRESTful.Models;
 using PersonRESTful.Services;
 using System;
@@ -156,5 +157,48 @@ namespace PersonRESTful.Tests.Controllers
             var objectResult = (ObjectResult)result;
             objectResult.StatusCode.Should().Be(500);
         }
+
+        [Fact]
+        public async Task PersonsController_CreatePerson_ReturnsOk_AndIActionResult()
+        {
+            // Arrange
+            var personJSON = new PersonJSON
+            {
+                Name = "John",
+                LastName = "Doe",
+                Zipcode = "12345",
+                City = "Anytown",
+                Color = "1"
+            };
+
+            var expectedPersons = new List<Person>
+            {
+                new Person {Name = "John", LastName = "Doe", Zipcode = "12345", City = "Anytown", Color = "brau" }
+            };
+
+            A.CallTo(() => _personService.CreatePerson(personJSON)).Returns(Task.FromResult((IEnumerable<Person>)expectedPersons));
+
+            // Act
+            var result = await _personsController.CreatePerson(personJSON);
+
+            // Assert
+            result.Should().BeOfType<OkObjectResult>();
+
+            var objectResult = (ObjectResult)result;
+
+            objectResult.Value.Should().BeEquivalentTo(expectedPersons);
+        }
+
+        [Fact]
+        public async Task PersonsController_CreatePerson_ReturnsBadRequest_WhenInputIsNull()
+        {
+            // Act
+            var result = await _personsController.CreatePerson(null);
+
+            // Assert
+            result.Should().BeOfType<BadRequestResult>();
+        }
     }
+
+
 }
