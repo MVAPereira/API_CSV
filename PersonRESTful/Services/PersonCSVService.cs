@@ -87,6 +87,26 @@ namespace PersonRESTful.Services
             }
         }
 
+        private async Task WritePersonToCSV(PersonCreation personCreation)
+        {
+            bool isNewLineNeeded = await IsNewLineNeeded();
+
+            using (var stream = new FileStream(_csvPath, FileMode.Append, FileAccess.Write, FileShare.None, 4096, useAsync: true))
+            using (var writer = new StreamWriter(stream))
+            using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            }))
+            {
+                if (isNewLineNeeded)
+                {
+                    await writer.WriteLineAsync();
+                }
+                csv.WriteRecord(personCreation);
+                await writer.FlushAsync(); 
+            }
+        }
+
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
             var persons = await ReturnsValidPersons();
@@ -121,22 +141,7 @@ namespace PersonRESTful.Services
                 Color = personJSON.Color
             };
 
-            bool isNewLineNeeded = await IsNewLineNeeded();
-
-            using (var stream = new FileStream(_csvPath, FileMode.Append, FileAccess.Write, FileShare.None))
-            using (var writer = new StreamWriter(stream))
-            using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false
-            }))
-            {
-                if (isNewLineNeeded)
-                {
-                    writer.WriteLine();
-                }
-                csv.WriteRecord(personCreation);
-                csv.NextRecord();
-            }
+            await WritePersonToCSV(personCreation);
 
             var persons = await ReturnsValidPersons();
             return persons;
