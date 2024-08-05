@@ -77,12 +77,19 @@ namespace PersonRESTful.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreatePerson(PersonJSON personJSON)
         {
-            if (personJSON == null)
+            try
             {
-                return BadRequest();
+                if (personJSON == null)
+                {
+                    return BadRequest();
+                }
+                var persons = await _personService.CreatePerson(personJSON);
+                return Ok(persons);
             }
-            var persons = await _personService.CreatePerson(personJSON);
-            return Ok(persons);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
