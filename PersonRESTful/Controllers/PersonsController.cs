@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PersonRESTful.Dto;
 using PersonRESTful.Models;
 using PersonRESTful.Services;
+using System;
+using System.Drawing;
 
 namespace PersonRESTful.Controllers
 {
@@ -71,6 +74,12 @@ namespace PersonRESTful.Controllers
             }
         }
 
+        [HttpPost("create")]
+        public async Task<IActionResult> CreatePerson(PersonJSON personJSON)
+        {
+            var persons = await _personService.CreatePerson(personJSON);
+            return Ok(persons);
+        }
     }
 }
     

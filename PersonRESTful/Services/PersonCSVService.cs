@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using PersonRESTful.Dto;
 using PersonRESTful.Models;
 using System;
 using System.Formats.Asn1;
@@ -20,58 +21,50 @@ namespace PersonRESTful.Services
 
         private async Task<IEnumerable<Person>> ReturnValidPersons()
         {
-            var reader = new StreamReader(_csvPath);
-            var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false
-            };
-
-            var fileContent = await reader.ReadToEndAsync();
-            var stringReader = new StringReader(fileContent);
-
-            var csv = new CsvReader(stringReader, csvConfig);
-            csv.Context.RegisterClassMap(_classMap);
-
             List<Person> persons = new List<Person>();
 
-            while (csv.Read())
+            using (var reader = new StreamReader(_csvPath))
             {
-                try
+                var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    var record = csv.GetRecord<Person>();
+                    HasHeaderRecord = false
+                };
 
-                    if (string.IsNullOrEmpty(record.Name))
-                    {
-                        throw new ArgumentException("The field is empty!");
-                    }
+                var fileContent = await reader.ReadToEndAsync();
 
-                    if (string.IsNullOrEmpty(record.LastName))
-                    {
-                        throw new ArgumentException("The field is empty!");
-                    }
-
-                    if (string.IsNullOrEmpty(record.Zipcode))
-                    {
-                        throw new ArgumentException("The field is empty!");
-                    }
-
-                    if (string.IsNullOrEmpty(record.City))
-                    {
-                        throw new ArgumentException("The field is empty!");
-                    }
-
-                    if (string.IsNullOrEmpty(record.Color))
-                    {
-                        throw new ArgumentException("The field is empty!");
-                    }
-
-                    persons.Add(record);
-                }
-                catch (Exception ex)
+                using (var stringReader = new StringReader(fileContent))
+                using (var csv = new CsvReader(stringReader, csvConfig))
                 {
-                    Console.WriteLine(ex.Message);
+                    csv.Context.RegisterClassMap(_classMap);
+
+                    while (csv.Read())
+                    {
+                        try
+                        {
+                            var record = csv.GetRecord<Person>();
+
+                            if 
+                            (
+                                string.IsNullOrEmpty(record.Name) ||
+                                string.IsNullOrEmpty(record.LastName) ||
+                                string.IsNullOrEmpty(record.Zipcode) ||
+                                string.IsNullOrEmpty(record.City) ||
+                                string.IsNullOrEmpty(record.Color)
+                            )
+                            {
+                                throw new ArgumentException("A field is empty");
+                            }
+
+                            persons.Add(record);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
+                        }
+                    }
                 }
             }
+
             return persons;
         }
 
@@ -93,5 +86,28 @@ namespace PersonRESTful.Services
             return persons.Where(p => p.Color == color).ToList();
         }
 
+        public async Task<IEnumerable<Person>> CreatePerson(PersonJSON personJSON)
+        {
+            PersonCreation personCreation = new PersonCreation()
+            {
+                LastName = personJSON.LastName,
+                Name = personJSON.Name,
+                ZipcodeCity = personJSON.Zipcode + " " + personJSON.City,
+                Color = personJSON.Color
+            };
+
+            using (var writer = new StreamWriter(_csvPath, append: true))
+            using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = false
+            }))
+            {
+                csv.WriteRecord(personCreation);
+                csv.NextRecord();
+            }
+
+            var persons = await ReturnValidPersons();
+            return persons;
+        }
     }
 }
