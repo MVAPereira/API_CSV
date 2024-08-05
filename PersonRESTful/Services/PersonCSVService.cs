@@ -1,9 +1,11 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
 using CsvHelper.TypeConversion;
 using PersonRESTful.Dto;
 using PersonRESTful.Models;
 using System;
+using System.ComponentModel;
 using System.Formats.Asn1;
 using System.Globalization;
 
@@ -42,7 +44,6 @@ namespace PersonRESTful.Services
                         try
                         {
                             var record = csv.GetRecord<Person>();
-
                             if 
                             (
                                 string.IsNullOrEmpty(record.Name) ||
@@ -68,6 +69,22 @@ namespace PersonRESTful.Services
             return persons;
         }
 
+        private async Task<bool> IsNewLineNeeded()
+        {
+            using (var reader = new StreamReader(_csvPath))
+            {
+                string fileContent = await reader.ReadToEndAsync();
+                if (fileContent.Length > 0 && fileContent[fileContent.Length - 1] != '\n')
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
             var persons = await ReturnsValidPersons();
@@ -89,6 +106,11 @@ namespace PersonRESTful.Services
 
         public async Task<IEnumerable<Person>> CreatePerson(PersonJSON personJSON)
         {
+            if (!personJSON.IsValidPersonJSON())
+            {
+                throw new InvalidOperationException();
+            }
+
             PersonCreation personCreation = new PersonCreation()
             {
                 LastName = personJSON.LastName,
@@ -97,20 +119,7 @@ namespace PersonRESTful.Services
                 Color = personJSON.Color
             };
 
-            bool needsNewLine = false;
-
-            using (var readStream = new FileStream(_csvPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
-            {
-                if (readStream.Length > 0)
-                {
-                    readStream.Seek(-1, SeekOrigin.End);
-                    int lastChar = readStream.ReadByte();
-                    if (lastChar != '\n')
-                    {
-                        needsNewLine = true;
-                    }
-                }
-            }
+            bool isNewLineNeeded = await IsNewLineNeeded();
 
             using (var stream = new FileStream(_csvPath, FileMode.Append, FileAccess.Write, FileShare.None))
             using (var writer = new StreamWriter(stream))
@@ -119,7 +128,7 @@ namespace PersonRESTful.Services
                 HasHeaderRecord = false
             }))
             {
-                if (needsNewLine)
+                if (isNewLineNeeded)
                 {
                     writer.WriteLine();
                 }
