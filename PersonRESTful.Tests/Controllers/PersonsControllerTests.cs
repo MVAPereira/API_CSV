@@ -198,6 +198,23 @@ namespace PersonRESTful.Tests.Controllers
             // Assert
             result.Should().BeOfType<BadRequestResult>();
         }
+
+        [Fact] 
+        public async Task PersonsController_CreatePerson_ReturnsInternalServerError_WhenOnExpection()
+        {
+            // Arrange
+            var personJSON = new PersonJSON();
+
+            A.CallTo(() => _personService.CreatePerson(personJSON)).Throws<Exception>();
+
+            // Act
+            var result = await _personsController.CreatePerson(personJSON);
+
+            // Assert
+            result.Should().BeOfType<ObjectResult>();
+            var objectResult = (ObjectResult)result;
+            objectResult.StatusCode.Should().Be(500);
+        }
     }
 
 
