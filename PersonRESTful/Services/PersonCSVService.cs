@@ -19,7 +19,7 @@ namespace PersonRESTful.Services
             _classMap = classMap;
         }
 
-        private async Task<IEnumerable<Person>> ReturnValidPersons()
+        private async Task<IEnumerable<Person>> ReturnsValidPersons()
         {
             List<Person> persons = new List<Person>();
 
@@ -70,19 +70,20 @@ namespace PersonRESTful.Services
 
         public async Task<IEnumerable<Person>> GetAllPersons()
         {
-            return await Task.Run(() => ReturnValidPersons());
+            var persons = await ReturnsValidPersons();
+            return persons;
         }
 
         public async Task<Person> GetPersonById(int personId)
         {
-            var persons = await ReturnValidPersons();
+            var persons = await ReturnsValidPersons();
             var person = persons.FirstOrDefault(p => p.Id == personId);
             return person;
         }
 
         public async Task<IEnumerable<Person>> GetPersonsByColor(string color)
         {
-            var persons = await ReturnValidPersons();
+            var persons = await ReturnsValidPersons();
             return persons.Where(p => p.Color == color).ToList();
         }
 
@@ -106,7 +107,7 @@ namespace PersonRESTful.Services
                 csv.NextRecord();
             }
 
-            var persons = await ReturnValidPersons();
+            var persons = await ReturnsValidPersons();
             return persons;
         }
     }
