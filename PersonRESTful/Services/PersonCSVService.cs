@@ -25,7 +25,7 @@ namespace PersonRESTful.Services
         {
             List<Person> persons = new List<Person>();
 
-            using (var stream = new FileStream(_csvPath, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var stream = new FileStream(_csvPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None, 4096, useAsync: true))
             using (var reader = new StreamReader(stream))
             {
                 var csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -72,7 +72,7 @@ namespace PersonRESTful.Services
 
         private async Task<bool> IsNewLineNeeded()
         {
-            using (var stream = new FileStream(_csvPath, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (var stream = new FileStream(_csvPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.None, 4096, useAsync: true))
             using (var reader = new StreamReader(stream))
             {
                 string fileContent = await reader.ReadToEndAsync();
