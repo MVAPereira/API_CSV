@@ -123,7 +123,8 @@ namespace PersonRESTful.Services
         public async Task<IEnumerable<Person>> GetPersonsByColor(string color)
         {
             var persons = await ReturnsValidPersons();
-            return persons.Where(p => p.Color == color).ToList();
+            var filteteredPersons = persons.Where(p => p.Color == color);
+            return filteteredPersons.Any() ? filteteredPersons : null;
         }
 
         public async Task<IEnumerable<Person>> CreatePerson(PersonJSON personJSON)
