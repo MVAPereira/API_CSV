@@ -192,6 +192,9 @@ namespace PersonRESTful.Tests.Controllers
         [Fact]
         public async Task PersonsController_CreatePerson_ReturnsBadRequest_WhenInputIsNull()
         {
+            // Arrange
+            A.CallTo(() => _personService.CreatePerson(null)).Throws<ArgumentNullException>();
+
             // Act
             var result = await _personsController.CreatePerson(null);
 

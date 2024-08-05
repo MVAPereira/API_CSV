@@ -12,7 +12,6 @@ namespace PersonRESTful.Dto
 
         public bool IsValidPersonJSON()
         {
-
             if 
             (
                 string.IsNullOrWhiteSpace(LastName) ||
@@ -28,9 +27,7 @@ namespace PersonRESTful.Dto
             {
                 return false;
             }
-
             return true;
-
         }
     }
 }
