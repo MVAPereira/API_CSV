@@ -97,12 +97,32 @@ namespace PersonRESTful.Services
                 Color = personJSON.Color
             };
 
-            using (var writer = new StreamWriter(_csvPath, append: true))
+            bool needsNewLine = false;
+
+            using (var readStream = new FileStream(_csvPath, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite))
+            {
+                if (readStream.Length > 0)
+                {
+                    readStream.Seek(-1, SeekOrigin.End);
+                    int lastChar = readStream.ReadByte();
+                    if (lastChar != '\n')
+                    {
+                        needsNewLine = true;
+                    }
+                }
+            }
+
+            using (var stream = new FileStream(_csvPath, FileMode.Append, FileAccess.Write, FileShare.None))
+            using (var writer = new StreamWriter(stream))
             using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false
             }))
             {
+                if (needsNewLine)
+                {
+                    writer.WriteLine();
+                }
                 csv.WriteRecord(personCreation);
                 csv.NextRecord();
             }
