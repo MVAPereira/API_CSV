@@ -2,5 +2,5 @@
 
 API developed for interaction with csv files.
 
-![Endpoints](https://github.com/MVAPereira/API_CSV/blob/main/endpoints.png)
+![Endpoints](https://github.com/MVAPereira/API_CSV/blob/main/imgs/endpoints.png)
 
